@@ -1,0 +1,25 @@
+@charset 'UTF-8';
+
+.card__warapper {
+	perspective: 500px;
+}
+
+.card {
+	position: relative;
+	width: 240px;
+	transform-style: preserve-3d; /* 3Dアニメーションの宣言 */
+}
+
+.card__front,
+.card__back {
+	position: absolute;
+	backface-visibility: hidden;
+}
+.card__back {
+	transform: rotateY(180deg);
+	background-color: rgba(0, 0, 0, 0.5);
+}
+.card__front img,
+.card__back img {
+	vertical-align: bottom;
+}
