@@ -1,5 +1,6 @@
 
 const cards = document.querySelectorAll('.card');
+const BG = document.getElementById('BG');
 //let hover_animation;
 let flipped_switch = false;
 
@@ -38,8 +39,20 @@ cards.forEach(card => {
 		gsap.to(card, {
 			rotationY: flipped_switch ? 180 : 0,
 			duration: 0.8,
+			scale: 2,
+			transformOrigin: 'center center',
 			ease: 'power2.inOut',
 		});
+		BG.classList.add('over');
+		card.classList.add('choise');
+
+		if (flipped_switch) {
+			BG.classList.add('over');
+			card.classList.add('choise');
+		} else {
+			BG.classList.remove('over');
+			card.classList.remove('choise');
+		}
 	});
 
 });

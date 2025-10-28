@@ -1,5 +1,23 @@
 @charset 'UTF-8';
 
+body {
+	margin: 0;
+	padding: 0;
+}
+
+.container__BG {
+	position: fixed;
+	inset: 0;
+	background: rgba(0,0,0,0.5);
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.4s;
+}
+.container__BG.over {
+	opacity: 1;
+	pointer-events: all;
+}
+
 .container {
 	display: flex;
 	justify-content: space-around;
@@ -20,6 +38,14 @@
 	background: #fff;
 }
 
+.card.choise {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	transform: translate(-50%, -50%);
+	z-index: 200;
+}
+
 .card__front,
 .card__back {
 	position: absolute;
@@ -31,7 +57,3 @@
 	transform: rotateY(180deg);
 	background-color: rgba(0, 0, 0, 0.5);
 }
-/* .card__front img,
-.card__back img {
-	vertical-align: bottom;
-} */
