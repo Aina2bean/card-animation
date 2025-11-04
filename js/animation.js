@@ -1,14 +1,14 @@
 
 const cards = document.querySelectorAll('.card');
 const BG = document.getElementById('BG');
-//let hover_animation;
-let flipped_switch = false;
+let currentSelected = null;
 
 console.log('cards:', cards.length);
 
 cards.forEach(card => {
 
 	card.addEventListener('mousemove', (e) => {
+		if (currentSelected) return; // 選択中はホバー効果を停止
 
 		const rect = card.getBoundingClientRect();
 		const x = e.clientX - rect.left;
@@ -26,6 +26,7 @@ cards.forEach(card => {
 	});
 
 	card.addEventListener('mouseleave', () => {
+		if (currentSelected) return;
 		gsap.to(card, {
 			rotationX: 0,
 			rotationY: 0,
@@ -35,24 +36,69 @@ cards.forEach(card => {
 	});
 
 	card.addEventListener('click', () => {
-		flipped_switch = !flipped_switch;
-		gsap.to(card, {
-			rotationY: flipped_switch ? 180 : 0,
-			duration: 0.8,
-			scale: 2,
-			transformOrigin: 'center center',
-			ease: 'power2.inOut',
-		});
-		BG.classList.add('over');
-		card.classList.add('choise');
-
-		if (flipped_switch) {
-			BG.classList.add('over');
-			card.classList.add('choise');
-		} else {
+		// 既にこのカードが選択中ならリセット
+		if (currentSelected === card) {
+			currentSelected = null;
 			BG.classList.remove('over');
-			card.classList.remove('choise');
+			cards.forEach(c => {
+				c.classList.remove('choise');
+				c.classList.remove('dim');
+				gsap.to(c, {
+					x: 0,
+					y: 0,
+					xPercent: 0,
+					yPercent: 0,
+					scale: 1,
+					rotationX: 0,
+					rotationY: 0,
+					duration: 0.6,
+					ease: 'power2.inOut',
+					clearProps: 'position,top,left,zIndex'
+				});
+			});
+			return;
 		}
+
+		// 新しく選択
+		currentSelected = card;
+		BG.classList.add('over');
+
+		const viewportCenterX = window.innerWidth / 2;
+		const duration = 0.8;
+
+		cards.forEach(c => {
+			const isSelected = c === card;
+			if (isSelected) {
+				c.classList.add('choise');
+				c.classList.remove('dim');
+				gsap.to(c, {
+					rotationY: 360,
+					scale: 2,
+					position: 'fixed',
+					top: '50%',
+					left: '50%',
+					xPercent: -50,
+					yPercent: -50,
+					transformOrigin: 'center center',
+					duration,
+					ease: 'power2.inOut',
+					backgroundColor: '#ccc'
+				});
+			} else {
+				c.classList.remove('choise');
+				c.classList.add('dim');
+				const rect = c.getBoundingClientRect();
+				const centerX = rect.left + rect.width / 2;
+				const shiftX = (viewportCenterX - centerX) * 0.5; // 真ん中へ50%寄せる
+				gsap.to(c, {
+					x: shiftX,
+					scale: 0.95,
+					rotationY: 0,
+					duration,
+					ease: 'power2.inOut'
+				});
+			}
+		});
 	});
 
 });

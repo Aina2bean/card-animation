@@ -5,18 +5,19 @@ body {
 	padding: 0;
 }
 
-.container__BG {
+/* .container__BG {
 	position: fixed;
 	inset: 0;
 	background: rgba(0,0,0,0.5);
 	opacity: 0;
 	pointer-events: none;
 	transition: opacity 0.4s;
+ 	z-index: 100;
 }
 .container__BG.over {
 	opacity: 1;
 	pointer-events: all;
-}
+} */
 
 .container {
 	display: flex;
@@ -30,6 +31,7 @@ body {
 .card {
 	width: 240px;
 	height: 320px;
+	position: relative; /* z-index を効かせるため */
 	transform-style: preserve-3d;
 	transition: transform 0.2s ease-out;
 	box-shadow: 0 10px 10px rgba(0, 0, 0, 0.3);
@@ -42,8 +44,15 @@ body {
 	position: fixed;
 	top: 50%;
 	left: 50%;
-	transform: translate(-50%, -50%);
-	z-index: 200;
+	z-index: 1000; /* すべての上に */
+}
+
+/* 非選択カードのグレーアウト */
+.card.dim {
+	filter: grayscale(1) brightness(0.6);
+	opacity: 0.8;
+	pointer-events: none;
+	z-index: 50; /* BG(100) より下に配置してグレー化を確実に */
 }
 
 .card__front,
@@ -56,4 +65,9 @@ body {
 .card__back {
 	transform: rotateY(180deg);
 	background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* 選択中は背面の半透明を無効化（回転中に裏面が前に来ても透けない） */
+.card.choise .card__back {
+	background-color: transparent;
 }
